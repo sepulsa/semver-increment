@@ -19,4 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - id: semver
+        uses: ./
+      - run: echo "${{ steps.semver.output.version }}"
