@@ -1,16 +1,25 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {ReleaseType, SemVer} from 'semver'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const semver = new SemVer(core.getInput('version', {required: true}))
+    const release: ReleaseType = core.getInput('release', {
+      required: true
+    }) as ReleaseType
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    let identifier: string | undefined = undefined
 
-    core.setOutput('time', new Date().toTimeString())
+    switch (release) {
+      case 'premajor':
+      case 'preminor':
+      case 'prepatch':
+      case 'prerelease':
+        identifier = core.getInput('identifier', {required: true})
+        break
+    }
+
+    core.setOutput('version', semver.inc(release, identifier).version)
   } catch (error) {
     core.setFailed(error.message)
   }
