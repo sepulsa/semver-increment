@@ -1,11 +1,24 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Semver increment'
+description: 'Github action to increment semver'
+author: 'sepulsa'
 inputs:
-  milliseconds: # change this
+  version:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Version to increment'
+    default: '0.1.0'
+  release:
+    required: true
+    description: 'One of: `major`, `minor`, `patch`, `premajor`, `preminor`, `prepatch`, or `prerelease`'
+    default: 'patch'
+  identifier:
+    required: false
+    description: 'Identifier to be used to prefix `premajor`, `preminor`, `prepatch` or `prerelease` version increments'
+outputs:
+  version:
+    description: 'The incremented version'
 runs:
-  using: 'node12'
+  using: node12
   main: 'dist/index.js'
+branding:
+  icon: chevrons-up
+
